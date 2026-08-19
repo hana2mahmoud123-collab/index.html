@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نور المؤمن 🕌</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #f1c40f;
+      text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+    }
+
+    .notif-banner {
+      background: rgba(241, 196, 15, 0.15);
+      border: 1px solid #f1c40f;
+      padding: 10px 15px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .notif-banner button {
+      padding: 6px 12px;
+      background: #f1c40f;
+      color: #111;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 5px;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #f1c40f;
+      color: #111;
+      font-weight: bold;
+    }
+
+    .content-section {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #2ecc71;
+    }
+
+    .prayer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .prayer-time {
+      font-size: 0.85rem;
+      color: #f1c40f;
+      margin-left: 8px;
+    }
+
+    .prayer-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #2ecc71;
+      cursor: pointer;
+    }
+
+    .test-btn {
+      width: 100%;
+      padding: 10px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .azkar-card {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .azkar-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 15px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .azkar-count-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #2ecc71;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 10px auto;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .tasbeeh-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .counter-btn {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #f1c40f, #f39c12);
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      color: #111;
+      font-size: 2.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(241, 196, 15, 0.4);
+    }
+
+    .reset-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>نور المؤمن 🕌</h1>
+    <p id="locationText">المواقيت حسب توقيت مصر 🇪🇬</p>
+  </header>
+
+  <div class="notif-banner" id="notifBanner">
+    <span id="notifStatus">🔔 فعّل التنبيهات الصوتية</span>
+    <button onclick="enableSoundNotifications()">تفعيل</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('prayers', event)">الصلوات 🤲</button>
+    <button class="tab-btn" onclick="switchTab('azkar', event)">الأذكار 📖</button>
+    <button class="tab-btn" onclick="switchTab('tasbeeh', event)">السبحة 📿</button>
+  </div>
+
+  <!-- 1. قسم الصلوات -->
+  <div id="prayers" class="content-section active">
+    <div class="card">
+      <h3>مواقيت الصلاة اليوم 📅</h3>
+      
+      <div class="prayer-item">
+        <span>الفجر 🌅</span>
+        <div>
+          <span class="prayer-time" id="time-fajr">جاري التحميل...</span>
+          <input type="checkbox" onchange="savePrayer('fajr', this.checked)" id="fajr">
+        </div>
+      </div>
+
+      <div class="prayer-item">
+        <span>الظهر ☀️</span>
+        <div>
+          <span class="prayer-time" id="time-dhuhr">جاري التحميل...</span>
+          <input type="checkbox" onchange="savePrayer('dhuhr', this.checked)" id="dhuhr">
+        </div>
+      </div>
+
+      <div class="prayer-item">
+        <span>العصر 🌤️</span>
+        <div>
+          <span class="prayer-time" id="time-asr">جاري التحميل...</span>
+          <input type="checkbox" onchange="savePrayer('asr', this.checked)" id="asr">
+        </div>
+      </div>
+
+      <div class="prayer-item">
+        <span>المغرب 🌆</span>
+        <div>
+          <span class="prayer-time" id="time-maghrib">جاري التحميل...</span>
+          <input type="checkbox" onchange="savePrayer('maghrib', this.checked)" id="maghrib">
+        </div>
+      </div>
+
+      <div class="prayer-item">
+        <span>العشاء 🌙</span>
+        <div>
+          <span class="prayer-time" id="time-isha">جاري التحميل...</span>
+          <input type="checkbox" onchange="savePrayer('isha', this.checked)" id="isha">
+        </div>
+      </div>
+
+      <button class="test-btn" onclick="playBeepSound()">تجربة صوت التنبيه 🔊</button>
+    </div>
+  </div>
+
+  <!-- 2. قسم الأذكار -->
+  <div id="azkar" class="content-section">
+    <div class="azkar-card">
+      <h3 style="color:#f1c40f; margin-bottom: 10px;">الأذكار اليومية ✨</h3>
+      <div class="azkar-text" id="azkarText">جاري تحميل الأذكار...</div>
+      
+      <button class="azkar-count-btn" id="azkarCountBtn" onclick="clickAzkar()">3</button>
+      <p style="font-size:0.8rem; opacity:0.8;">اضغط على العداد عند القراءة</p>
+
+      <div style="margin-top: 15px;">
+        <button class="nav-btn" onclick="prevZikr()">السابق ◀</button>
+        <button class="nav-btn" onclick="nextZikr()">التالي ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. قسم السبحة -->
+  <div id="tasbeeh" class="content-section">
+    <div class="card tasbeeh-container">
+      <h3 style="color:#f1c40f;">سبحان الله وبحمده</h3>
+      <div class="counter-btn" id="counter" onclick="countUp()">0</div>
+      <button class="reset-btn" onclick="resetCounter()">تصفير العداد 🔄</button>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId, evt) {
+      document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      evt.target.classList.add('active');
+    }
+
+    // --- جلب مواقيت الصلاة ---
+    function fetchPrayerTimes() {
+      fetch('https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5')
+        .then(response => response.json())
+        .then(data => {
+          const timings = data.data.timings;
+          
+          const convertTime = (time24) => {
+            let [hours, minutes] = time24.split(':');
+            hours = parseInt(hours);
+            let period = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes} ${period}`;
+          };
+
+          document.getElementById('time-fajr').textContent = convertTime(timings.Fajr);
+          document.getElementById('time-dhuhr').textContent = convertTime(timings.Dhuhr);
+          document.getElementById('time-asr').textContent = convertTime(timings.Asr);
+          document.getElementById('time-maghrib').textContent = convertTime(timings.Maghrib);
+          document.getElementById('time-isha').textContent = convertTime(timings.Isha);
+        })
+        .catch(err => {
+          document.getElementById('time-fajr').textContent = "04:30 ص";
+          document.getElementById('time-dhuhr').textContent = "12:00 م";
+          document.getElementById('time-asr').textContent = "03:30 م";
+          document.getElementById('time-maghrib').textContent = "06:40 م";
+          document.getElementById('time-isha').textContent = "08:10 م";
+        });
+    }
+
+    // --- نظام التنبيهات الصوتية (لأن Acode بيحظر نظام الإشعارات النصية) ---
+    let soundEnabled = false;
+
+    function enableSoundNotifications() {
+      soundEnabled = true;
+      document.getElementById('notifStatus').textContent = "✅ تم تفعيل التنبيهات بنجاح";
+      document.getElementById('notifBanner').style.borderColor = "#2ecc71";
+      playBeepSound(); // تجربة الصوت فوراً
+      
+      // تجربة فتح إذن النظام لو فتحت الملف في متصفح خارجي زي Chrome
+      if ("Notification" in window) {
+        Notification.requestPermission();
+      }
+    }
+
+    function playBeepSound() {
+      // إخراج صوت تنبيه حقيقي باستخدام Web Audio API من غير ملفات خارجية
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // نغمة التنبيه
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      } catch (e) {
+        alert("تم تشغيل التنبيه 🔔");
+      }
+    }
+
+    // --- الأذكار ---
+    const azkarList = [
+      { text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لا إِلَهَ إِلا اللَّهُ", count: 1 },
+      { text: "آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...", count: 1 },
+      { text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ", count: 3 },
+      { text: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", count: 10 },
+      { text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", count: 7 },
+      { text: "لا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ العَلِيِّ العَظِيمِ", count: 3 }
+    ];
+
+    let currentZikrIndex = 0;
+    let currentZikrCount = azkarList[0].count;
+
+    function renderZikr() {
+      const zikr = azkarList[currentZikrIndex];
+      document.getElementById('azkarText').textContent = zikr.text;
+      document.getElementById('azkarCountBtn').textContent = currentZikrCount;
+    }
+
+    function clickAzkar() {
+      if (navigator.vibrate) navigator.vibrate(30);
+      if (currentZikrCount > 1) {
+        currentZikrCount--;
+        document.getElementById('azkarCountBtn').textContent = currentZikrCount;
+      } else {
+        nextZikr();
+      }
+    }
+
+    function nextZikr() {
+      currentZikrIndex = (currentZikrIndex + 1) % azkarList.length;
+      currentZikrCount = azkarList[currentZikrIndex].count;
+      renderZikr();
+    }
+
+    function prevZikr() {
+      currentZikrIndex = (currentZikrIndex - 1 + azkarList.length) % azkarList.length;
+      currentZikrCount = azkarList[currentZikrIndex].count;
+      renderZikr();
+    }
+
+    // --- السبحة ---
+    let count = parseInt(localStorage.getItem('tasbeeh_count')) || 0;
+    const counterDisplay = document.getElementById('counter');
+    counterDisplay.textContent = count;
+
+    function countUp() {
+      count++;
+      counterDisplay.textContent = count;
+      localStorage.setItem('tasbeeh_count', count);
+      if (navigator.vibrate) navigator.vibrate(40);
+    }
+
+    function resetCounter() {
+      count = 0;
+      counterDisplay.textContent = 0;
+      localStorage.setItem('tasbeeh_count', 0);
+    }
+
+    function savePrayer(prayer, status) {
+      localStorage.setItem('prayer_' + prayer, status);
+    }
+
+    window.onload = function() {
+      fetchPrayerTimes();
+      renderZikr();
+
+      ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].forEach(p => {
+        if (localStorage.getItem('prayer_' + p) === 'true') {
+          document.getElementById(p).checked = true;
+        }
+      });
+    };
+  </script>
+</body>
+</html>
