@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نور المؤمن - تتبع الصلاة والتنبيهات 🕌</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #f1c40f;
+      text-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* زر تفعيل الإشعارات */
+    .notif-banner {
+      background: rgba(241, 196, 15, 0.15);
+      border: 1px solid #f1c40f;
+      padding: 10px 15px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .notif-banner button {
+      padding: 6px 12px;
+      background: #f1c40f;
+      color: #111;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* التبويبات Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 5px;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #f1c40f;
+      color: #111;
+      font-weight: bold;
+    }
+
+    .content-section {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    /* 1. قسم تتبع الصلاة */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #2ecc71;
+    }
+
+    .prayer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .prayer-time {
+      font-size: 0.85rem;
+      color: #f1c40f;
+      margin-right: 5px;
+    }
+
+    .prayer-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #2ecc71;
+      cursor: pointer;
+    }
+
+    /* 2. قسم السبحة الإلكترونية */
+    .tasbeeh-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .counter-btn {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #f1c40f, #f39c12);
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      color: #111;
+      font-size: 2.5rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(241, 196, 15, 0.4);
+      transition: transform 0.1s;
+    }
+
+    .counter-btn:active {
+      transform: scale(0.92);
+    }
+
+    .reset-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    /* 3. قسم الأذكار والتنبيهات */
+    .azkar-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-right: 4px solid #f1c40f;
+    }
+
+    .test-btn {
+      width: 100%;
+      padding: 10px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>نور المؤمن 🕌</h1>
+    <p>تتبع صلاتك واذكر ربك يومياً</p>
+  </header>
+
+  <!-- بنر طلب إذن الإشعارات -->
+  <div class="notif-banner" id="notifBanner">
+    <span>🔔 فعّل التنبيهات للصلوات</span>
+    <button onclick="requestNotificationPermission()">تفعيل</button>
+  </div>
+
+  <!-- أزرار التبويب -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('prayers', event)">الصلوات 🤲</button>
+    <button class="tab-btn" onclick="switchTab('tasbeeh', event)">السبحة 📿</button>
+    <button class="tab-btn" onclick="switchTab('azkar', event)">الأذكار 📖</button>
+  </div>
+
+  <!-- 1. قسم الصلوات والتنبيهات -->
+  <div id="prayers" class="content-section active">
+    <div class="card">
+      <h3>جدول الصلوات والتنبيه 📅</h3>
+      
+      <div class="prayer-item">
+        <div>
+          <span>الفجر 🌅</span>
+          <span class="prayer-time">(05:00 ص)</span>
+        </div>
+        <input type="checkbox" onchange="savePrayer('fajr', this.checked)" id="fajr">
+      </div>
+
+      <div class="prayer-item">
+        <div>
+          <span>الظهر ☀️</span>
+          <span class="prayer-time">(12:00 م)</span>
+        </div>
+        <input type="checkbox" onchange="savePrayer('dhuhr', this.checked)" id="dhuhr">
+      </div>
+
+      <div class="prayer-item">
+        <div>
+          <span>العصر 🌤️</span>
+          <span class="prayer-time">(03:30 م)</span>
+        </div>
+        <input type="checkbox" onchange="savePrayer('asr', this.checked)" id="asr">
+      </div>
+
+      <div class="prayer-item">
+        <div>
+          <span>المغرب 🌆</span>
+          <span class="prayer-time">(06:15 م)</span>
+        </div>
+        <input type="checkbox" onchange="savePrayer('maghrib', this.checked)" id="maghrib">
+      </div>
+
+      <div class="prayer-item">
+        <div>
+          <span>العشاء 🌙</span>
+          <span class="prayer-time">(07:45 م)</span>
+        </div>
+        <input type="checkbox" onchange="savePrayer('isha', this.checked)" id="isha">
+      </div>
+
+      <button class="test-btn" onclick="sendNotification('تنبيه تجريبي 🔔', 'التنبيهات شغال ممتازة في تطبيقك!')">تجربة التنبيه الآن 🔔</button>
+    </div>
+  </div>
+
+  <!-- 2. قسم السبحة -->
+  <div id="tasbeeh" class="content-section">
+    <div class="card tasbeeh-container">
+      <h3 style="color:#f1c40f;">سبحان الله وبحمده</h3>
+      <div class="counter-btn" id="counter" onclick="countUp()">0</div>
+      <button class="reset-btn" onclick="resetCounter()">تصفير العداد 🔄</button>
+    </div>
+  </div>
+
+  <!-- 3. قسم الأذكار -->
+  <div id="azkar" class="content-section">
+    <div class="card">
+      <h3>أذكار يومية مختارة ✨</h3>
+      <div class="azkar-item">
+        "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لا إِلَهَ إِلا اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ"
+      </div>
+      <div class="azkar-item">
+        "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ"
+      </div>
+      <div class="azkar-item">
+        "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ"
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. التنقل بين التبويبات
+    function switchTab(tabId, evt) {
+      document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      evt.target.classList.add('active');
+    }
+
+    // 2. طلب إذن الإشعارات والتنبيه
+    function requestNotificationPermission() {
+      if ("Notification" in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            document.getElementById('notifBanner').style.display = 'none';
+            sendNotification("تم تفعيل التنبيهات بنجاح 🕌", "سوف نقوم بتذكيرك بأوقات الصلوات والأذكار.");
+          } else {
+            alert("يرجى السماح بالتنبيهات من إعدادات المتصفح لكي تعمل التذكيرات.");
+          }
+        });
+      } else {
+        alert("متصفح الموبايل لا يدعم الإشعارات المباشرة.");
+      }
+    }
+
+    // إرسال إشعار
+    function sendNotification(title, body) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, {
+          body: body,
+          icon: 'https://cdn-icons-png.flaticon.com/512/2913/2913008.png'
+        });
+      } else {
+        alert(title + "\n" + body);
+      }
+    }
+
+    // 3. فحص أوقات الصلاة تلقائياً وإرسال إشعار
+    const prayerTimes = {
+      "05:00": "الفجر 🌅",
+      "12:00": "الظهر ☀️",
+      "15:30": "العصر 🌤️",
+      "18:15": "المغرب 🌆",
+      "19:45": "العشاء 🌙"
+    };
+
+    setInterval(() => {
+      const now = new Date();
+      const currentTime = now.toTimeString().substring(0, 5); // HH:MM
+
+      if (prayerTimes[currentTime] && now.getSeconds() === 0) {
+        sendNotification(`حان الآن موعد صلاة ${prayerTimes[currentTime]} 🕌`, "لا تنسَ أداء الصلاة في وقتها!");
+      }
+    }, 1000);
+
+    // 4. السبحة الإلكترونية
+    let count = parseInt(localStorage.getItem('tasbeeh_count')) || 0;
+    const counterDisplay = document.getElementById('counter');
+    counterDisplay.textContent = count;
+
+    function countUp() {
+      count++;
+      counterDisplay.textContent = count;
+      localStorage.setItem('tasbeeh_count', count);
+
+      if (navigator.vibrate) navigator.vibrate(40);
+    }
+
+    function resetCounter() {
+      count = 0;
+      counterDisplay.textContent = 0;
+      localStorage.setItem('tasbeeh_count', 0);
+    }
+
+    // 5. حفظ انتظام الصلاة في الموبايل
+    function savePrayer(prayer, status) {
+      localStorage.setItem('prayer_' + prayer, status);
+    }
+
+    window.onload = function() {
+      // إخفاء بنر الإشعارات إذا تم التفعيل سابقاً
+      if ("Notification" in window && Notification.permission === "granted") {
+        document.getElementById('notifBanner').style.display = 'none';
+      }
+
+      // تحميل حالة checkboxes
+      ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].forEach(p => {
+        const saved = localStorage.getItem('prayer_' + p);
+        if (saved === 'true') {
+          document.getElementById(p).checked = true;
+        }
+      });
+    };
+  </script>
+</body>
+</html>
